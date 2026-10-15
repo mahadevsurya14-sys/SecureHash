@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Content Security Policy strictly blocks all outgoing connections -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; connect-src 'none'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline';">
+  <meta name="description" content="SecureHash is an elite, cyberpunk client-side cryptographic password hash generator using HTML5, CSS3, and the Web Crypto API. Zero server transmissions.">
+  <meta name="theme-color" content="#05080e">
+  <title>SecureHash // Cyber Cryptographic Terminal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="crt-overlay">
+  <!-- Background Cyber Matrix Canvas -->
+  <canvas id="cyber-bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Scanline & Vignette Effect Layer -->
+  <div class="crt-scanlines" aria-hidden="true"></div>
+
+  <!-- Accessible Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main terminal</a>
+
+  <div class="app-wrapper">
+    <!-- Top Cyber Telemetry Bar -->
+    <div class="telemetry-bar" role="complementary" aria-label="System Telemetry">
+      <div class="telemetry-container">
+        <div class="telemetry-left">
+          <span class="telemetry-node"><span class="blink-dot"></span>SYS_NODE: LOCAL_SECURE</span>
+          <span class="telemetry-sep">|</span>
+          <span class="telemetry-item">NET_TRANSMIT: <strong class="text-glow-red">BLOCKED (0.0.0.0)</strong></span>
+          <span class="telemetry-sep">|</span>
+          <span class="telemetry-item">CORE: <strong class="text-glow-green">W3C_SUBTLE_CRYPTO</strong></span>
+        </div>
+        <div class="telemetry-right">
+          <button type="button" id="btn-toggle-sound" class="telemetry-btn" title="Toggle Synthesizer Sound Effects" aria-label="Toggle Sound Effects">
+            <svg id="sound-icon-on" class="telemetry-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            <svg id="sound-icon-off" class="telemetry-icon is-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <line x1="23" y1="9" x2="17" y2="15"/>
+              <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+            <span id="sound-label">AUDIO: ON</span>
+          </button>
+          <button type="button" id="btn-toggle-matrix" class="telemetry-btn" title="Toggle Matrix Digital Rain" aria-label="Toggle Matrix Visual Rain">
+            <span class="fx-glyph">⌘</span>
+            <span id="matrix-label">MATRIX: FX</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="app-header" role="banner">
+      <div class="header-container">
+        <div class="brand-group">
+          <div class="cyber-shield-container" aria-hidden="true">
+            <div class="cyber-shield-ring"></div>
+            <div class="brand-logo">
+              <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+          </div>
+          <div class="brand-text">
+            <div class="brand-title-row">
+              <h1 class="brand-title" data-text="SECURE_HASH">SECURE_HASH</h1>
+              <span class="badge badge-cyber">MIL-SPEC</span>
+              <span class="badge badge-accent">v1.0.4</span>
+            </div>
+            <p class="brand-subtitle">// CRYPTOGRAPHIC PASSWORD DIGEST MATRIX // AIR-GAPPED ARCHITECTURE</p>
+          </div>
+        </div>
+
+        <div class="header-status-card" id="crypto-status-pill" role="status" aria-label="Cryptographic Subsystem Status">
+          <div class="status-pulse-ring" aria-hidden="true"></div>
+          <div class="status-indicator-dot" id="crypto-status-dot" aria-hidden="true"></div>
+          <div class="status-text-content">
+            <span class="status-headline" id="crypto-status-title">CHECKING CRYPTO ENGINE...</span>
+            <span class="status-subtext" id="crypto-status-desc">SUBTLE_CRYPTO_INITIALIZING</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="app-main" role="main">
+      <div class="main-container">
+
+        <!-- Privacy & Air-Gap Defense Banner -->
+        <div class="cyber-alert-banner" role="region" aria-label="Zero-Knowledge Air-Gap Guarantee">
+          <div class="cyber-banner-bracket left" aria-hidden="true"></div>
+          <div class="cyber-banner-bracket right" aria-hidden="true"></div>
+          <div class="privacy-icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="privacy-info">
+            <div class="privacy-title-row">
+              <strong class="privacy-title">ZERO-KNOWLEDGE CLIENT ENGINE // CSP ISOLATED</strong>
+              <span class="tag-airgap">[ AIR-GAP VERIFIED ]</span>
+            </div>
+            <p class="privacy-desc">
+              All hashing operates in-memory on your local CPU via the hardware-accelerated Web Crypto API. Network transport layer is hard-disabled via CSP (<code>connect-src 'none'</code>). Passwords never touch disk, storage, or external networks.
+            </p>
+          </div>
+        </div>
+
+        <!-- Main Terminal Dashboard -->
+        <section class="generator-card cyber-panel" aria-labelledby="generator-heading">
+          <!-- Cyber HUD Decorative Corner Marks -->
+          <div class="hud-corner top-left" aria-hidden="true"></div>
+          <div class="hud-corner top-right" aria-hidden="true"></div>
+          <div class="hud-corner bottom-left" aria-hidden="true"></div>
+          <div class="hud-corner bottom-right" aria-hidden="true"></div>
+
+          <div class="card-header">
+            <h2 id="generator-heading" class="card-title">
+              <span class="cyber-prompt">&gt;</span>
+              INPUT_STREAM &amp; ALGORITHM_SELECTOR
+            </h2>
+            <div class="card-action-bar">
+              <button type="button" id="btn-quick-presets" class="btn btn-cyber-ghost btn-sm" aria-expanded="false" aria-controls="presets-panel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <span>NIST TEST VECTORS</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Official NIST Presets Collapsible Drawer -->
+          <div id="presets-panel" class="presets-panel is-hidden" aria-hidden="true">
+            <div class="presets-header">
+              <span class="presets-title">// OFFICIAL NIST FIPS 180-4 VERIFICATION VECTORS:</span>
+              <span class="presets-desc">Inject verified cryptographic standard vectors to test mathematical exactness in real-time.</span>
+            </div>
+            <div class="presets-grid">
+              <button type="button" class="preset-pill" data-vector="abc" data-algo="SHA-256">
+                <code>"abc"</code> &rarr; <strong>SHA-256</strong>
+              </button>
+              <button type="button" class="preset-pill" data-vector="" data-algo="SHA-256">
+                <code>"" (EMPTY STRING)</code> &rarr; <strong>SHA-256</strong>
+              </button>
+              <button type="button" class="preset-pill" data-vector="abc" data-algo="SHA-384">
+                <code>"abc"</code> &rarr; <strong>SHA-384</strong>
+              </button>
+              <button type="button" class="preset-pill" data-vector="abc" data-algo="SHA-512">
+                <code>"abc"</code> &rarr; <strong>SHA-512</strong>
+              </button>
+              <button type="button" class="preset-pill" data-vector="CipherCore#2026!$" data-algo="SHA-256">
+                <code>"CipherCore#2026!$"</code> &rarr; <strong>SHA-256</strong>
+              </button>
+              <button type="button" class="preset-pill" data-vector="🛡️ZeroTrust_Matrix@99! ⚡" data-algo="SHA-512">
+                <code>Unicode / Emojis / UTF-8</code> &rarr; <strong>SHA-512</strong>
+              </button>
+            </div>
+          </div>
+
+          <form id="hash-form" novalidate onsubmit="return false;">
+            <!-- Password / Plaintext Input Field -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="password-input" class="form-label">
+                  <span class="terminal-caret">&gt;</span> ENTER TARGET PLAINTEXT / PASSWORD:
+                  <span class="required-indicator" aria-hidden="true">*</span>
+                </label>
+                <div class="input-metrics" id="input-metrics" aria-live="off">
+                  <span id="char-count">0 CHARS</span>
+                  <span class="metrics-separator">|</span>
+                  <span id="byte-count">0 UTF-8 BYTES</span>
+                </div>
+              </div>
+
+              <div class="input-wrapper">
+                <div class="input-glow-border"></div>
+                <input 
+                  type="password" 
+                  id="password-input" 
+                  name="passwordInput"
+                  class="form-control password-field" 
+                  placeholder="Type or paste payload to digest..." 
+                  autocomplete="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  aria-describedby="input-metrics input-error-msg entropy-hud"
+                  required
+                >
+                <button 
+                  type="button" 
+                  id="btn-toggle-visibility" 
+                  class="btn-icon-addon" 
+                  aria-label="Show password as plaintext"
+                  title="Toggle plaintext visibility"
+                >
+                  <!-- Eye Icon (Hidden state) -->
+                  <svg id="eye-icon-show" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <!-- Eye Slash Icon (Visible state) -->
+                  <svg id="eye-icon-hide" class="icon is-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Input Error Alert -->
+              <div id="input-error-msg" class="field-error is-hidden" role="alert" aria-live="assertive"></div>
+
+              <!-- Cyber Entropy Telemetry HUD -->
+              <div class="entropy-hud" id="entropy-hud" aria-live="polite">
+                <div class="entropy-top">
+                  <div class="entropy-label-group">
+                    <span class="entropy-title">PAYLOAD ENTROPY ESTIMATOR:</span>
+                    <span id="entropy-bits" class="entropy-bits-badge">0.0 BITS</span>
+                  </div>
+                  <div class="entropy-level-badge" id="entropy-level">EMPTY</div>
+                </div>
+                <!-- Cyber segmented bar gauge -->
+                <div class="entropy-meter-bar">
+                  <div class="entropy-segment" id="seg-1"></div>
+                  <div class="entropy-segment" id="seg-2"></div>
+                  <div class="entropy-segment" id="seg-3"></div>
+                  <div class="entropy-segment" id="seg-4"></div>
+                  <div class="entropy-segment" id="seg-5"></div>
+                </div>
+                <!-- Character composition flags -->
+                <div class="entropy-flags" aria-hidden="true">
+                  <span class="char-flag" id="flag-lower">a-z</span>
+                  <span class="char-flag" id="flag-upper">A-Z</span>
+                  <span class="char-flag" id="flag-digits">0-9</span>
+                  <span class="char-flag" id="flag-symbols">!@#$</span>
+                  <span class="char-flag" id="flag-unicode">UTF-8</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Algorithm Selection -->
+            <div class="form-group">
+              <label class="form-label" id="algo-selection-label">
+                <span class="terminal-caret">&gt;</span> SELECT CRYPTOGRAPHIC DIGEST ALGORITHM:
+              </label>
+
+              <div class="algo-grid" role="radiogroup" aria-labelledby="algo-selection-label">
+                <!-- SHA-256 -->
+                <label class="algo-card" for="algo-sha256">
+                  <input type="radio" name="hashAlgorithm" id="algo-sha256" value="SHA-256" checked>
+                  <div class="algo-card-content">
+                    <div class="algo-title-row">
+                      <span class="algo-name">SHA-256</span>
+                      <span class="algo-tag">256-BIT</span>
+                    </div>
+                    <p class="algo-desc">32 bytes // 64 hex chars. NIST FIPS 180-4 standard. Universal integrity benchmark.</p>
+                  </div>
+                  <div class="algo-active-indicator" aria-hidden="true"></div>
+                </label>
+
+                <!-- SHA-384 -->
+                <label class="algo-card" for="algo-sha384">
+                  <input type="radio" name="hashAlgorithm" id="algo-sha384" value="SHA-384">
+                  <div class="algo-card-content">
+                    <div class="algo-title-row">
+                      <span class="algo-name">SHA-384</span>
+                      <span class="algo-tag">384-BIT</span>
+                    </div>
+                    <p class="algo-desc">48 bytes // 96 hex chars. Truncated 512-bit state. NSA Suite B / Top Secret standard.</p>
+                  </div>
+                  <div class="algo-active-indicator" aria-hidden="true"></div>
+                </label>
+
+                <!-- SHA-512 -->
+                <label class="algo-card" for="algo-sha512">
+                  <input type="radio" name="hashAlgorithm" id="algo-sha512" value="SHA-512">
+                  <div class="algo-card-content">
+                    <div class="algo-title-row">
+                      <span class="algo-name">SHA-512</span>
+                      <span class="algo-tag">512-BIT</span>
+                    </div>
+                    <p class="algo-desc">64 bytes // 128 hex chars. 64-bit word architecture. Maximum collision resilience.</p>
+                  </div>
+                  <div class="algo-active-indicator" aria-hidden="true"></div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Form Action Buttons -->
+            <div class="action-buttons-row">
+              <button type="button" id="btn-generate" class="btn btn-cyber-primary">
+                <span class="btn-spinner is-hidden" id="btn-spinner" aria-hidden="true"></span>
+                <svg id="generate-icon" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+                <span id="btn-generate-text">EXECUTE DIGEST</span>
+                <span class="btn-corner-cut" aria-hidden="true"></span>
+              </button>
+
+              <button type="button" id="btn-clear" class="btn btn-cyber-secondary">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="17"/>
+                  <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+                <span>RESET BUFFER</span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Accessible Live Status Alert Box -->
+          <div id="status-message-box" class="status-box is-hidden" role="status" aria-live="polite">
+            <div class="status-box-icon" id="status-icon" aria-hidden="true"></div>
+            <div class="status-box-content">
+              <span id="status-title" class="status-box-title"></span>
+              <span id="status-desc" class="status-box-desc"></span>
+            </div>
+          </div>
+
+          <!-- Output Display Section -->
+          <div id="output-section" class="output-container is-hidden" aria-labelledby="output-heading">
+            <div class="output-header">
+              <div class="output-title-group">
+                <h3 id="output-heading" class="output-title">
+                  <span class="terminal-caret">&gt;</span> GENERATED CRYPTOGRAPHIC DIGEST:
+                </h3>
+                <div class="output-tags">
+                  <span id="output-algo-badge" class="badge badge-accent">SHA-256</span>
+                  <span id="output-length-badge" class="badge badge-cyber">64 HEX CHARS (256 BITS)</span>
+                  <span id="output-time-badge" class="badge badge-time">0.12 MS</span>
+                </div>
+              </div>
+              <div class="output-action-group">
+                <button type="button" id="btn-copy-hash" class="btn btn-copy" title="Copy complete hash to clipboard" aria-label="Copy hash to clipboard">
+                  <svg id="copy-icon" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                  <svg id="check-icon" class="btn-icon is-hidden text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span id="copy-btn-text">COPY HASH</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Terminal Code Output Box with Matrix Glow -->
+            <div class="output-display-box">
+              <div class="output-box-hud-line" aria-hidden="true"></div>
+              <div class="output-code-wrapper">
+                <code id="hash-output" class="hash-text" tabindex="0" aria-label="Generated cryptographic hash" role="textbox" aria-readonly="true"></code>
+              </div>
+            </div>
+
+            <!-- Hash Integrity / Comparison Tool -->
+            <div class="hash-verifier-bar">
+              <div class="verifier-toggle-row">
+                <button type="button" id="btn-toggle-verifier" class="btn btn-cyber-ghost btn-sm" aria-expanded="false" aria-controls="verifier-panel">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                  </svg>
+                  <span>// VERIFY / COMPARE AGAINST KNOWN CHECKSUM</span>
+                </button>
+              </div>
+
+              <div id="verifier-panel" class="verifier-panel is-hidden" aria-hidden="true">
+                <div class="verifier-input-group">
+                  <label for="compare-input" class="verifier-label">&gt; EXPECTED HASH CHECKSUM (CASE-INSENSITIVE):</label>
+                  <input type="text" id="compare-input" class="form-control verifier-input" placeholder="Paste expected hash to cross-verify in constant time..." spellcheck="false" autocomplete="off">
+                </div>
+                <div id="compare-result" class="compare-result is-hidden" role="status" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Security Intelligence & Cryptography Guide -->
+        <section class="security-knowledge-section" aria-labelledby="sec-education-title">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <div class="shield-badge" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+              </div>
+              <h2 id="sec-education-title" class="section-heading">CRITICAL PASSWORD SECURITY &amp; CRYPTOGRAPHY MATRIX</h2>
+            </div>
+            <p class="section-subtext">Fundamental cryptographic principles for cybersecurity engineers, penetration testers, and defense architects.</p>
+          </div>
+
+          <div class="security-grid">
+            <!-- Principle 1 -->
+            <article class="sec-card cyber-card">
+              <div class="sec-card-header">
+                <span class="sec-icon warning-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 22 22 22 12 2"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </span>
+                <h3 class="sec-card-title">1. Hashing is Not Encryption</h3>
+              </div>
+              <p class="sec-card-body">
+                <strong>Hashing is an irreversible one-way mathematical trapdoor function.</strong> There is mathematically no decryption key or reverse operation. 
+                Encryption is two-way (ciphertext decrypted via secret keys). Never confuse cryptographic digests (data integrity and credential verification) with reversible encryption (confidentiality).
+              </p>
+            </article>
+
+            <!-- Principle 2 -->
+            <article class="sec-card cyber-card">
+              <div class="sec-card-header">
+                <span class="sec-icon danger-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                </span>
+                <h3 class="sec-card-title">2. Fast Hashes &ne; Secure Password Storage</h3>
+              </div>
+              <p class="sec-card-body">
+                General-purpose algorithms like <strong>SHA-256, SHA-384, and SHA-512</strong> were engineered for high throughput on data streams. 
+                Modern consumer GPUs compute <strong>billions of SHA-256 hashes per second</strong>. 
+                Storing user passwords as bare SHA-256 makes them trivial to break via dictionary attacks, Hashcat, or rainbow tables if leaked.
+              </p>
+            </article>
+
+            <!-- Principle 3 -->
+            <article class="sec-card cyber-card">
+              <div class="sec-card-header">
+                <span class="sec-icon success-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                </span>
+                <h3 class="sec-card-title">3. Dedicated Storage: Argon2id</h3>
+              </div>
+              <p class="sec-card-body">
+                For storing user passwords in real web backends, use an adaptive, memory-hard key-derivation function.
+                <strong>Argon2id (RFC 9106)</strong> is the gold standard winner of the Password Hashing Competition, designed to defeat ASIC and GPU parallel cracking. 
+                Secondary alternatives include <strong>scrypt</strong> or properly tuned <strong>bcrypt</strong> (work factor &ge; 12).
+              </p>
+            </article>
+
+            <!-- Principle 4 -->
+            <article class="sec-card cyber-card">
+              <div class="sec-card-header">
+                <span class="sec-icon info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </span>
+                <h3 class="sec-card-title">4. Cryptographic Salts are Mandatory</h3>
+              </div>
+              <p class="sec-card-body">
+                A <strong>salt</strong> is a unique, cryptographically random sequence of bytes (e.g. 16+ bytes from a CSPRNG like <code>crypto.getRandomValues</code>) generated per account. 
+                Salts ensure two identical passwords produce completely distinct hashes, destroying precomputed Rainbow Table attacks. Salts are public and stored alongside the hash.
+              </p>
+            </article>
+
+            <!-- Principle 5 -->
+            <article class="sec-card cyber-card">
+              <div class="sec-card-header">
+                <span class="sec-icon accent-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                  </svg>
+                </span>
+                <h3 class="sec-card-title">5. Not a Complete Auth Subsystem</h3>
+              </div>
+              <p class="sec-card-body">
+                A client-side hash generator cannot substitute for enterprise authentication. Production architectures mandate:
+                TLS/HTTPS transport, server-side parameter re-validation, rate-limiting against automated brute force, multi-factor authentication (MFA/FIDO2 WebAuthn), and secure HTTP-only SameSite cookies.
+              </p>
+            </article>
+
+            <!-- Principle 6 -->
+            <article class="sec-card cyber-card">
+              <div class="sec-card-header">
+                <span class="sec-icon notice-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                  </svg>
+                </span>
+                <h3 class="sec-card-title">6. Client-Side Threat Model &amp; Boundaries</h3>
+              </div>
+              <p class="sec-card-body">
+                Local computation eliminates network transmission, shielding against Wi-Fi sniffers and intermediary proxies. 
+                However, client execution <em>cannot</em> protect against a compromised operating system, malicious browser extensions, hardware keyloggers, or Cross-Site Scripting (XSS).
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Technical Specification Matrix Table -->
+        <section class="tech-spec-section cyber-panel" aria-labelledby="tech-spec-title">
+          <div class="hud-corner top-left" aria-hidden="true"></div>
+          <div class="hud-corner top-right" aria-hidden="true"></div>
+          <div class="hud-corner bottom-left" aria-hidden="true"></div>
+          <div class="hud-corner bottom-right" aria-hidden="true"></div>
+
+          <div class="section-title-wrap">
+            <h3 id="tech-spec-title" class="section-subheading">
+              <span class="terminal-caret">&gt;</span> ALGORITHM ARCHITECTURE &amp; FIPS 180-4 SPECIFICATIONS
+            </h3>
+          </div>
+          <div class="table-responsive">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th scope="col">ALGORITHM</th>
+                  <th scope="col">OUTPUT LENGTH</th>
+                  <th scope="col">HEX CHARACTERS</th>
+                  <th scope="col">BLOCK SIZE</th>
+                  <th scope="col">FIPS STANDARD</th>
+                  <th scope="col">PRIMARY SECURITY DOMAIN</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="mono-tag">SHA-256</span></td>
+                  <td>256 bits (32 bytes)</td>
+                  <td>64 hex digits</td>
+                  <td>512 bits</td>
+                  <td>FIPS PUB 180-4</td>
+                  <td>Digital signatures (ECDSA/RSA), TLS certificates, Git commit hashes, Bitcoin SHA-256d POW</td>
+                </tr>
+                <tr>
+                  <td><span class="mono-tag">SHA-384</span></td>
+                  <td>384 bits (48 bytes)</td>
+                  <td>96 hex digits</td>
+                  <td>1024 bits</td>
+                  <td>FIPS PUB 180-4</td>
+                  <td>NSA Suite B Cryptography, TLS 1.3 ciphersuites, high-assurance digital legal signatures</td>
+                </tr>
+                <tr>
+                  <td><span class="mono-tag">SHA-512</span></td>
+                  <td>512 bits (64 bytes)</td>
+                  <td>128 hex digits</td>
+                  <td>1024 bits</td>
+                  <td>FIPS PUB 180-4</td>
+                  <td>High-collision-resistance verification, 64-bit CPU architecture optimization, Ed25519 signatures</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Cyber Footer -->
+    <footer class="app-footer" role="contentinfo">
+      <div class="footer-container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <div class="footer-brand">
+              <span class="brand-title-sm">SECURE_HASH // CORE</span>
+              <p class="footer-desc">An educational, privacy-first cybersecurity utility engineered for transparency, cryptographic integrity, and zero-knowledge client execution.</p>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-heading">// ZERO-KNOWLEDGE ARCHITECTURE</h4>
+            <ul class="footer-list">
+              <li>[✓] ZERO SERVER TRANSMISSIONS (OFFLINE AIR-GAP)</li>
+              <li>[✓] NO LOCALSTORAGE / COOKIES / TELEMETRY</li>
+              <li>[✓] ZERO THIRD-PARTY SCRIPTS OR EXTERNAL CDNS</li>
+              <li>[✓] CSP ENFORCED: CONNECT-SRC 'NONE'</li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-heading">// ENGINEERING &amp; STANDARDS</h4>
+            <p class="footer-meta">
+              Built with <strong>HTML5</strong>, <strong>CSS3</strong>, <strong>Vanilla JavaScript</strong>, and standard W3C <strong>Web Crypto API</strong> (<code>SubtleCrypto.digest</code>).
+            </p>
+            <p class="footer-disclaimer">
+              <strong>SECURITY DISCLAIMER:</strong> This utility is designed for cryptographic testing, development, and cybersecurity education. Generating a SHA-2 hash alone does not constitute secure password storage for user authentication databases.
+            </p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; SECURE_HASH CRYPTOGRAPHIC UTILITIES // BUILT FOR CYBERSECURITY PROFESSIONALS &amp; RESEARCHERS</p>
+          <div class="footer-badges">
+            <span class="status-indicator-badge">100% CLIENT-SIDE</span>
+            <span class="status-indicator-badge">AIR-GAP READY</span>
+            <span class="status-indicator-badge">W3C SUBTLE_CRYPTO</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
